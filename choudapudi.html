@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The June Ayurvedic | उदगीर</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1a4314; 
+            --accent: #e67e22;  
+            --bg: #f9f4e8;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); }
+
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1600');
+            background-size: cover; background-position: center;
+            height: 40vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; color: white;
+        }
+
+        .navbar { background-color: var(--primary) !important; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .nav-link { color: white !important; cursor: pointer; margin: 0 10px; }
+        .nav-link.active { border-bottom: 2px solid var(--accent); color: var(--accent) !important; }
+
+        .content-tab { display: none; padding: 40px 0; }
+        .content-tab.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .product-card { background: white; border-radius: 15px; overflow: hidden; transition: 0.3s; height: 100%; border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .product-card img { height: 160px; object-fit: cover; width: 100%; }
+        
+        .info-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.3s; }
+        .info-card:hover { transform: translateX(10px); }
+        .info-card h5 { color: var(--primary); font-weight: 600; }
+
+        .btn-custom { background: var(--primary); color: white; border-radius: 25px; border: none; padding: 8px 20px; transition: 0.3s; }
+        .btn-custom:hover { background: var(--accent); color: white; }
+        footer { background: var(--primary); color: white; padding: 20px 0; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#"><b>THE JUNE AYURVEDIC</b></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" onclick="showTab('home')">Home</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('about')">About Products</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('order')">Order</a></li>
+                <li class="nav-item"><a class="nav-link" onclick="showTab('contact')">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div id="home" class="content-tab active p-0">
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="display-5 fw-bold">चार पिढ्यांच्या विश्वासाचे नाव</h1>
+            <p>जुने आयुर्वेदिक चौडापुडी दुकान, उदगीर</p>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">आमची लोकप्रिय उत्पादने</h2>
+        <div class="row g-4" id="homeProducts"></div>
+    </div>
+</div>
+
+<div id="about" class="content-tab container">
+    <h2 class="text-center mb-4">उत्पादनांची सविस्तर माहिती</h2>
+    <p class="text-center mb-5 text-muted">आमची २० हून अधिक उत्पादने आणि त्यांचे उपयोग खालीलप्रमाणे आहेत:</p>
+    <div id="productInfoList" class="row"></div>
+</div>
+
+<div id="order" class="content-tab container">
+    <h2 class="text-center mb-5">सर्व उत्पादने खरेदी करा</h2>
+    <div class="row g-4" id="allProducts"></div>
+</div>
+
+<div id="contact" class="content-tab container text-center">
+    <h3>संपर्क माहिती</h3>
+    <p class="mt-4"><i class="fas fa-map-marker-alt"></i> चौबारा रोड, उदगीर, जि. लातूर</p>
+    <p><i class="fas fa-phone"></i> +91 9850660957</p>
+</div>
+
+<div class="modal fade" id="orderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="https://formsubmit.co/abhishekankalle@gmail.com" method="POST">
+                <div class="modal-header bg-success text-white"><h5>ऑर्डर फॉर्म</h5></div>
+                <div class="modal-body">
+                    <input type="hidden" name="Product" id="prod_name">
+                    <input type="text" name="Name" class="form-control mb-3" placeholder="नाव" required>
+                    <input type="tel" name="Phone" class="form-control mb-3" placeholder="मोबाईल" required>
+                    <textarea name="Address" class="form-control" placeholder="पत्ता" required></textarea>
+                </div>
+                <div class="modal-footer"><button type="submit" class="btn btn-success w-100">ऑर्डर कन्फर्म करा</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2026 The June Ayurvedic. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // २० उत्पादनांची यादी (List of 20 Products)
+    const items = [
+        {n: "चौडापुडी लेप", p: "₹30", i: "https://images.unsplash.com/photo-1564277287253-934c868e54ea?w=400", m: "सांधेदुखी, गुडघेदुखी आणि हाडांच्या कोणत्याही जुन्या दुखण्यावर हा लेप अत्यंत रामबाण आहे."},
+        {n: "शतावरी चूर्ण", p: "₹60", i: "https://images.unsplash.com/photo-1606761141830-6142998cead0?w=400", m: "स्त्रियांच्या आरोग्यासाठी आणि शरीरातील थकवा दूर करून शक्ती वाढवण्यासाठी उत्तम."},
+        {n: "अश्वगंधा चूर्ण", p: "₹60", i: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400", m: "तणाव कमी करणे, झोप व्यवस्थित लागणे आणि शारीरिक ऊर्जा वाढवण्यासाठी उपयुक्त."},
+        {n: "गोखरू चूर्ण", p: "₹40", i: "https://images.unsplash.com/photo-1512290923902-8a9f81dc2069?w=400", m: "मुतखडा, लघवीची जळजळ आणि किडनीशी संबंधित तक्रारींवर गुणकारी."},
+        {n: "त्रिफळा चूर्ण", p: "₹30", i: "https://images.unsplash.com/photo-1543459176-6fee864c23f4?w=400", m: "बद्धकोष्ठता, गॅस आणि पचनाच्या समस्या दूर करून पोट पूर्णपणे साफ करते."},
+        {n: "आमला चूर्ण", p: "₹40", i: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=400", m: "केस गळती थांबवते, डोळ्यांचे तेज वाढवते आणि शरीरातील उष्णता कमी करते."},
+        {n: "नीम तेल", p: "₹95", i: "https://images.unsplash.com/photo-1590233648082-5178d275f530?w=400", m: "त्वचेचे विकार, खाज, पिंपल्स आणि जखमा लवकर भरून काढण्यासाठी उत्तम."},
+        {n: "भृंगराज तेल", p: "₹190", i: "https://images.unsplash.com/photo-1617897903246-719242758050?w=400", m: "केसांचे मुळे घट्ट करण्यासाठी आणि अकाली केस पांढरे होण्यापासून रोखण्यासाठी रामबाण."},
+        {n: "कुंकुमादी तेल", p: "₹150", i: "https://images.unsplash.com/photo-1601049541289-9b1b7abcfe19?w=400", m: "चेहऱ्याचा रंग उजळण्यासाठी आणि डाग घालवण्यासाठी पारंपारिक आयुर्वेदिक तेल."},
+        {n: "दशमुलारिष्ट", p: "₹140", i: "https://images.unsplash.com/photo-1512290902248-2b93a811ff3d?w=400", m: "प्रसूतीनंतर स्त्रियांना येणारा अशक्तपणा आणि वात विकारांवर अत्यंत गुणकारी."},
+        {n: "ब्राह्मी चूर्ण", p: "₹55", i: "https://images.unsplash.com/photo-1584017947282-2ca4566f1255?w=400", m: "स्मरणशक्ती वाढवण्यासाठी आणि एकाग्रता मिळवण्यासाठी विद्यार्थ्यांसाठी उत्तम."},
+        {n: "काले मेघे चूर्ण", p: "₹50", i: "https://images.unsplash.com/photo-1540555700478-4be289fbecee?w=400", m: "लिव्हरच्या तक्रारी आणि भूक न लागण्याच्या समस्येवर औषध म्हणून काम करते."},
+        {n: "मंजिष्ठा चूर्ण", p: "₹70", i: "https://images.unsplash.com/photo-1563483772248-2b93a811ff3d?w=400", m: "रक्त शुद्धीकरणासाठी आणि त्वचेच्या तकाकीसाठी नैसर्गिक रक्तशोधक."},
+        {n: "सुंठ पावडर", p: "₹35", i: "https://images.unsplash.com/photo-1599307734110-d830509b5bc4?w=400", m: "सर्दी, खोकला, कफ आणि सांधेदुखीवर घरगुती तसेच प्रभावी उपाय."},
+        {n: "ज्येष्ठमध चूर्ण", p: "₹45", i: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400", m: "घशातील खवखव, खोकला आणि ॲसिडिटीवर त्वरित आराम देते."},
+        {n: "हिरडा चूर्ण", p: "₹30", i: "https://via.placeholder.com/400?text=Hirda", m: "अग्निमांद्य आणि पचन विकारांवर गुणकारी, डोळ्यांसाठीही फायदेशीर."},
+        {n: "बेहडा चूर्ण", p: "₹30", i: "https://via.placeholder.com/400?text=Behada", m: "श्वासाच्या त्रासावर आणि कफावर नियंत्रण ठेवण्यासाठी उपयुक्त."},
+        {n: "अर्जुन साल चूर्ण", p: "₹50", i: "https://via.placeholder.com/400?text=Arjun+Sal", m: "हृदयविकार आणि रक्तदाब (Blood Pressure) नियंत्रित ठेवण्यासाठी प्रभावी."},
+        {n: "पिंपळी चूर्ण", p: "₹65", i: "https://via.placeholder.com/400?text=Pimpali", m: "जुन्या खोकल्यावर आणि पचनसंस्थेच्या तक्रारींवर आयुर्वेदिक उपाय."},
+        {n: "गुडुची (गुळवेल) घन", p: "₹80", i: "https://via.placeholder.com/400?text=Guduchi", m: "ताप, डेंग्यू आणि शरीराची रोगप्रतिकारक शक्ती वाढवण्यासाठी सर्वोत्तम."}
+    ];
+
+    function showTab(id) {
+        $('.content-tab').removeClass('active');
+        $('.nav-link').removeClass('active');
+        $(`#${id}`).addClass('active');
+        $(`a[onclick="showTab('${id}')"]`).addClass('active');
+        window.scrollTo(0,0);
+    }
+
+    function renderContent() {
+        const homeDiv = $('#homeProducts');
+        const allDiv = $('#allProducts');
+        const infoDiv = $('#productInfoList');
+
+        items.forEach((it, index) => {
+            // Card design
+            let card = `
+                <div class="col-md-3 col-6">
+                    <div class="product-card card p-2 text-center">
+                        <img src="${it.i}" class="rounded">
+                        <h6 class="mt-2 mb-1">${it.n}</h6>
+                        <p class="text-success fw-bold mb-2">${it.p}</p>
+                        <button class="btn btn-custom btn-sm w-100" onclick="openOrder('${it.n}')">Order Now</button>
+                    </div>
+                </div>`;
+            
+            if(index < 8) homeDiv.append(card); // Home show top 8
+            allDiv.append(card); // All tab show all 20
+
+            // Info rendering for About Tab
+            infoDiv.append(`
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <h5>${it.n}</h5>
+                        <p class="mb-0 text-dark small">${it.m}</p>
+                    </div>
+                </div>
+            `);
+        });
+    }
+
+    $(document).ready(function() {
+        renderContent();
+    });
+
+    function openOrder(n) {
+        $('#prod_name').val(n);
+        new bootstrap.Modal(document.getElementById('orderModal')).show();
+    }
+</script>
+</body>
+</html>
